@@ -55,6 +55,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->authGuard('web'); //matches with the auth guard
+            ->authGuard('web'); //matches with the auth
     }
 }

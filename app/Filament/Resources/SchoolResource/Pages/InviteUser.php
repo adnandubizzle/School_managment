@@ -96,7 +96,7 @@ class InviteUser extends Page
         LoginToken::create([
             'user_id' => $user->id,
             'token' => $token,
-            'expires_at' => now()->addMinutes(30),
+            'expires_at' => now()->addMinutes(5),
         ]);
 
         Mail::raw("Click here to log in: " . route('magic.login', $token), function ($message) {
@@ -109,7 +109,7 @@ class InviteUser extends Page
             ->success()
             ->send();
 
-            
+
         // Clear form after sending
 
         $this->email = '';

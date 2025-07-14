@@ -12,7 +12,10 @@ class SchoolSwitchController extends Controller
 {
     public function switch(School $school): RedirectResponse
     {
+        dd("HII");
+
         // Ensure the user belongs to this school
+
     /** @var \App\Models\User|null $user */
 $user = Auth::user();
 
