@@ -27,17 +27,17 @@ class InviteUser extends Page
     public $email = '';
     public $role = '';
 
-    public function mount(School $record): void
+    public function mount($record)
     {
-        // Check authorization in mount method
-        if (!$this->canUserAccess($record)) {
+        // Always resolve $record to a School model
+        $school = \App\Models\School::findOrFail($record);
+        if (!$this->canUserAccess($school)) {
             abort(403, 'You do not have permission to access this page.');
         }
-
-        $this->record = $record;
+        $this->record = $school;
     }
 
-    protected function canUserAccess(School $school): bool
+    protected function canUserAccess($school)
     {
                     /** @var \App\Models\User|null $user */
 

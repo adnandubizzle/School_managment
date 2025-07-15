@@ -19,24 +19,26 @@ class BulkInviteUsers extends Page
     protected static string $resource = \App\Filament\Resources\SchoolResource::class;
     protected static string $view = 'filament.resources.school-resource.pages.bulk-invite-users';
 
+    // DO NOT ADD TYPE HINTS TO PUBLIC PROPERTIES
     public $record;
     public $csv_file;
 
-    public function mount(School $record): void
+    // Remove type hint from mount
+    public function mount($record)
     {
-        if (!$this->canUserAccess($record)) {
+        $school = School::findOrFail($record);
+        if (!$this->canUserAccess($school)) {
             abort(403, 'You do not have permission to access this page.');
         }
-        $this->record = $record;
+        $this->record = $school;
     }
 
-    protected function canUserAccess(School $school): bool
+    protected function canUserAccess($school)
     {
         $user = Auth::user();
         if (!$user) {
             return false;
         }
-        /** @var \App\Models\User $user */
         return $user->schools()
             ->where('school_id', $school->id)
             ->wherePivotIn('role', ['owner', 'admin'])
@@ -47,13 +49,14 @@ class BulkInviteUsers extends Page
     {
         return $form->schema([
             Forms\Components\FileUpload::make('csv_file')
+                ->disk('public')
                 ->label('CSV File')
                 ->acceptedFileTypes(['text/csv', 'text/plain', 'application/csv'])
                 ->required(),
         ]);
     }
 
-    public function importCsv(): void
+    public function importCsv()
     {
         $this->validate([
             'csv_file' => 'required',
