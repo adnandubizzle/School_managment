@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 use App\Models\LoginToken;
+use App\Filament\Resources\SchoolResource\Pages\BulkInviteUsers;
 
 
 Route::middleware(['auth'])->group(function () {
@@ -16,3 +17,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/magic-login/{token}', [MagicController::class, 'login'])
     ->name('magic.login');
+
+Route::get('/schools/{record}/bulk-invite', BulkInviteUsers::class)
+    ->name('filament.resources.schools.bulk-invite');
+
+

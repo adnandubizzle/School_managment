@@ -22,7 +22,7 @@ class InviteUser extends Page
 
     protected static string $view = 'filament.resources.school-resource.pages.invite-user';
 
-    public ?School $record = null;
+    public $record = null;
 
     public $email = '';
     public $role = '';
@@ -72,10 +72,14 @@ class InviteUser extends Page
 
     public function sendInvite(): void
     {
-        $this->validate([
-            'email' => 'required|email',
-            'role' => 'required|in:admin,teacher,student',
-        ]);
+$this->validate([
+    'email' => 'required|email:dns',  //dns uses to see is its accurate domain namee
+    'role' => 'required|in:admin,teacher,student',
+], [
+    'email.email' => 'The email format is invalid.',
+    'email.dns' => 'This email domain cannot receive emails. Please check for typos.',
+]);
+
 
         $user = User::firstOrCreate(
             ['email' => $this->email],
@@ -96,7 +100,7 @@ class InviteUser extends Page
         LoginToken::create([
             'user_id' => $user->id,
             'token' => $token,
-            'expires_at' => now()->addMinutes(5),
+            'expires_at' => now()->addMinutes(5), //added an expiry that of 5 min from current timeStamop
         ]);
 
         Mail::raw("Click here to log in: " . route('magic.login', $token), function ($message) {

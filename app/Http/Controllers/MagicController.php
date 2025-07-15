@@ -11,22 +11,21 @@ class MagicController extends Controller
 {
     public function login(Request $request, $token)
     {
-        // Find the login token
+        // finding the login token in my model made named login_token
         $loginToken = LoginToken::where('token', $token)
             ->where('expires_at', '>', now())
             ->first();
 
         if (!$loginToken) {
-            return redirect()->route('login')
-            ->with('error', 'Invalid or expired login token.');
-        }
+        return redirect('/admin/login')->with('error', 'Invalid or expired login token.');
+}
 
         // token mil gya h Valid!
         //ab dekhy ga k user h?
         $user = User::find($loginToken->user_id);
         
         if (!$user) {
-            return redirect()->route('login')
+            return redirect('/admin/login')
                 ->with('error', 'User not found.');
         }
 //logout current user

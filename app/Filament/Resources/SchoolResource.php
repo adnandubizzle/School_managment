@@ -64,6 +64,7 @@ class SchoolResource extends Resource
         'create' => Pages\CreateSchool::route('/create'),
         'edit' => Pages\EditSchool::route('/{record}/edit'),
         'invite' => InviteUser::route('/{record}/invite'), 
+        'bulk-invite' => Pages\BulkInviteUsers::route('/{record}/bulk-invite'),
     ];
 }
 
